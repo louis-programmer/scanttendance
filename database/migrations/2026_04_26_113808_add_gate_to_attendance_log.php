@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('attendance_logs', function (Blueprint $table) { $table->id(); $table->foreignId('user_id')->constrained()->cascadeOnDelete(); $table->timestamp('scan_time'); $table->timestamps(); });
+        Schema::table('attendance_log', function (Blueprint $table) {
+            //
+        });
     }
 
     /**
@@ -19,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('attendance_logs');
+        Schema::table('attendance_log', function (Blueprint $table) {
+            //
+        });
     }
 };

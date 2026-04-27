@@ -1,0 +1,350 @@
+/* =========================================
+   GLOBAL THEME SYSTEM
+========================================= */
+:root {
+    --bg-main: #0f141a;
+    --bg-card: #1c1f26;
+    --bg-input: #11151b;
+
+    --text-main: #ffffff;
+    --text-muted: #9aa0a6;
+
+    --primary: #0984e3;
+
+    --success: #00ff9d;
+    --error: #ff3b5c;
+
+    --shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.theme-light {
+    --bg-main: #f5f6fa;
+    --bg-card: #ffffff;
+    --bg-input: #eef1f5;
+
+    --text-main: #111;
+    --text-muted: #666;
+
+    --shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+
+/* =========================================
+   GLOBAL BASE
+========================================= */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--bg-main);
+    color: var(--text-main);
+}
+
+/* GLOBAL: clean button-link behavior */
+a.btn,
+a.btn:visited,
+a.btn:hover,
+a.btn:active {
+    text-decoration: none;
+    color: white;
+}
+
+/* =========================================
+   LOGOUT BUTTON - RED GLOW EFFECT
+========================================= */
+.btn-danger {
+    background: var(--error);
+    box-shadow: 0 0 0 rgba(255, 59, 92, 0);
+    transition: 0.25s ease;
+}
+
+.btn-danger:hover {
+    box-shadow:
+        0 0 10px rgba(255, 59, 92, 0.5),
+        0 0 25px rgba(255, 59, 92, 0.35);
+    transform: translateY(-1px);
+}
+/* =========================================
+   DASHBOARD PAGE
+========================================= */
+
+/* NAVBAR */
+.navbar {
+    background: var(--bg-card);
+    padding: 14px 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.brand {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-actions form {
+    margin: 0;
+}
+
+/* LAYOUT */
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 24px;
+}
+
+/* HERO */
+.hero {
+    background: linear-gradient(145deg, #1c1f26, #141820);
+    padding: 28px;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+}
+
+/* GRID */
+/* =========================================
+   DASHBOARD GRID (MORE AIR / SPACING)
+========================================= */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+
+    gap: 22px; /* increased spacing */
+    margin-top: 20px;
+}
+
+/* make cards feel more separated visually */
+.card {
+    background: var(--bg-card);
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+
+    transition: 0.25s ease;
+}
+
+/* stronger separation hover effect */
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+}
+/* BUTTONS */
+.btn {
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-danger {
+    background: var(--error);
+}
+
+/* STATUS */
+.status-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.ok {
+    color: var(--success);
+}
+
+/* =========================================
+   SYSTEM STATUS SPACING ADJUSTMENT
+========================================= */
+.status-card {
+    margin-top: 30px; /* pushes it lower */
+}
+
+
+/* =========================================
+   SCAN PAGE
+========================================= */
+
+.scan-wrapper {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+
+    background: radial-gradient(circle at top, #111827, #0f141a);
+}
+
+/* MAIN CARD */
+.scan-card-main {
+    width: 100%;
+    max-width: 420px;
+
+    background: linear-gradient(145deg, #1c1f26, #141820);
+    padding: 32px;
+
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+
+    text-align: center;
+}
+
+/* TITLE */
+.scan-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.scan-subtitle {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* INPUT (CENTER FIX) */
+.scan-input {
+    width: 100%;
+    margin-top: 18px;
+    padding: 16px;
+
+    font-size: 18px;
+    text-align: center;
+
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+
+    background: var(--bg-input);
+    color: var(--text-main);
+
+    display: block;
+}
+.scan-input {
+    transition: all 0.18s ease;
+}
+
+.scan-input:focus {
+    border-color: var(--primary);
+
+    /* sharp glow instead of blur ring */
+    box-shadow:
+        0 0 0 1px rgba(9,132,227,0.8),
+        0 0 12px rgba(9,132,227,0.35),
+        inset 0 0 8px rgba(9,132,227,0.08);
+
+    transform: scale(1.01);
+}
+
+/* PULSE */
+.pulse-ring {
+    width: 70px;
+    height: 70px;
+    margin: 20px auto;
+
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.9); opacity: 0.5; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(0.9); opacity: 0.5; }
+}
+
+/* FOOTER */
+.scan-footer {
+    margin-top: 18px;
+}
+
+.back-btn {
+    display: inline-block;
+    padding: 10px 14px;
+
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+
+    color: var(--text-muted);
+    text-decoration: none;
+
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.back-btn:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+
+/* =========================================
+   SCAN FEED STACK
+========================================= */
+
+#scanStack {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+
+    width: 300px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    z-index: 9999;
+}
+
+/* CARD */
+.scan-card {
+    background: var(--bg-card);
+    padding: 14px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+
+    animation: slideIn 0.25s forwards;
+}
+
+/* STRONG VISUAL FEEDBACK */
+.scan-card.in {
+    border-left: 6px solid var(--success);
+    box-shadow: 0 0 25px rgba(0,255,157,0.25);
+}
+
+.scan-card.out {
+    border-left: 6px solid var(--error);
+    box-shadow: 0 0 25px rgba(255,59,92,0.25);
+}
+
+/* TEXT */
+.scan-name { font-weight: bold; }
+.scan-status { font-size: 12px; }
+.scan-meta { font-size: 11px; color: var(--text-muted); }
+
+/* ANIMATIONS */
+@keyframes slideIn {
+    from { transform: translateX(120%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.fade-out {
+    opacity: 0;
+    transform: translateX(40px);
+    transition: 0.3s ease;
+}

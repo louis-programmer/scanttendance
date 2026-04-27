@@ -1,3 +1,289 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* =========================================
+   THEME VARIABLES (SINGLE SOURCE OF TRUTH)
+========================================= */
+:root {
+    /* Colors */
+    --bg-main: #0f141a;
+    --bg-card: #1c1f26;
+    --bg-input: #11151b;
+    --bg-nav: #151a22;
+
+    --text-main: #ffffff;
+    --text-muted: #9aa0a6;
+
+    --primary: #0984e3;
+    --success: #00b894;
+    --error: #ff7675;
+    --danger: #e84118;
+
+    /* Spacing */
+    --space-sm: 10px;
+    --space-md: 16px;
+    --space-lg: 24px;
+
+    /* Radius */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+
+    /* Shadow */
+    --shadow: 0 10px 30px rgba(0,0,0,0.4);
+
+    /* Animation */
+    --transition: 0.3s ease;
+}
+
+/* LIGHT THEME */
+.theme-light {
+    --bg-main: #f5f6fa;
+    --bg-card: #ffffff;
+    --bg-input: #eef1f5;
+    --bg-nav: #2f3640;
+
+    --text-main: #000000;
+    --text-muted: #666;
+}
+
+/* =========================================
+   BASE
+========================================= */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--bg-main);
+    color: var(--text-main);
+    transition: var(--transition);
+}
+
+/* =========================================
+   NAVBAR
+========================================= */
+.navbar {
+    background: var(--bg-nav);
+    color: white;
+    padding: var(--space-md) var(--space-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand {
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.nav-actions {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+}
+
+/* =========================================
+   LAYOUT
+========================================= */
+.container {
+    padding: var(--space-lg);
+    max-width: 1000px;
+    margin: auto;
+}
+
+/* =========================================
+   CARD
+========================================= */
+.card {
+    background: var(--bg-card);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    margin-bottom: var(--space-md);
+}
+
+/* =========================================
+   INPUTS
+========================================= */
+input {
+    width: 100%;
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    border: none;
+    outline: none;
+    background: var(--bg-input);
+    color: var(--text-main);
+    transition: var(--transition);
+}
+
+input:focus {
+    box-shadow: 0 0 0 2px var(--primary);
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+.btn {
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    border: none;
+    cursor: pointer;
+    color: white;
+    background: var(--primary);
+    text-decoration: none;
+}
+
+.btn-danger {
+    background: var(--danger);
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+/* =========================================
+   GRID
+========================================= */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-md);
+}
+
+/* =========================================
+   TAGS
+========================================= */
+.tag {
+    display: inline-block;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: var(--radius-sm);
+    background: rgba(9,132,227,0.1);
+    color: var(--primary);
+}
+
+/* =========================================
+   TOGGLE BUTTON
+========================================= */
+.toggle {
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+}
+
+/* =========================================
+   SCAN STACK UI
+========================================= */
+#scanStack {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    z-index: 9999;
+}
+
+.scan-card {
+    background: var(--bg-card);
+    padding: var(--space-sm);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow);
+
+    transform: translateX(120%);
+    opacity: 0;
+    animation: slideIn var(--transition) forwards;
+}
+
+.scan-card.in {
+    border-left: 4px solid var(--success);
+}
+
+.scan-card.out {
+    border-left: 4px solid var(--error);
+}
+
+.scan-name {
+    font-weight: bold;
+}
+
+.scan-status {
+    font-size: 12px;
+}
+
+.scan-meta {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+@keyframes slideIn {
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.fade-out {
+    animation: fadeOut 0.4s forwards;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+}
+
+
+/* =========================================
+   SCAN PAGE EXTRAS
+========================================= */
+.subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+/* Pulse Animation */
+.pulse {
+    width: 60px;
+    height: 60px;
+    border: 3px solid var(--primary);
+    border-radius: 50%;
+    margin: 20px auto;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.9); opacity: 0.6; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(0.9); opacity: 0.6; }
+}
+
+/* Status Messages */
+.status {
+    margin-top: 15px;
+    min-height: 20px;
+}
+
+.success {
+    color: var(--success);
+}
+
+.error {
+    color: var(--error);
+}
+
+/* Back Link */
+.back {
+    margin-top: 20px;
+    font-size: 12px;
+}
+
+.back a {
+    color: var(--primary);
+    text-decoration: none;
+}

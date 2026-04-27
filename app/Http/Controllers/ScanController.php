@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\User;
-use App\Models\AttendanceLog;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ScanController extends Controller
 {
@@ -12,19 +13,62 @@ class ScanController extends Controller
         $this->middleware('auth');
     }
 
-    public function store(Request $request)
-    {
-        $user = User::where('barcode_id', $request->barcode)->first();
+public function store(Request $request)
+{
+    $code = $request->attendance_code;
+    $gate = $request->gate;
 
-        if (!$user) {
-            return back()->with('error', 'User not found');
-        }
+    // 1. Find attendee
+    $attendee = \DB::table('attendees')
+        ->where('attendance_code', $code)
+        ->first();
 
-        AttendanceLog::create([
-            'user_id' => $user->id,
-            'scan_time' => now(),
-        ]);
+    if (!$attendee) {
+    return response()->json([
+        'name' => 'Unknown User',
+        'status' => 'ERROR',
+        'gate' => $gate,
+        'time' => now()->format('H:i:s')
+    ]);
+}
+    $today = now()->toDateString();
 
-        return back()->with('success', $user->name . ' scanned');
-    }
+    // 2. Get last log today
+    $lastLog = \DB::table('attendance_logs')
+        ->where('attendance_code', $code)
+        ->where('date', $today)
+        ->orderByDesc('id')
+        ->first();
+
+    // 3. Determine IN/OUT
+    $logType = (!$lastLog) ? 'in' : ($lastLog->log === 'in' ? 'out' : 'in');
+
+    // 4. Insert log (FIXED)
+    \DB::table('attendance_logs')->insert([
+        'organization_number' => $attendee->organization_number,
+        'attendance_code' => $attendee->attendance_code,
+        'shift' => $attendee->shift,
+        'gate' => $gate,
+        'date' => $today,
+        'time' => now()->toTimeString(),
+        'log' => $logType,
+    ]);
+
+    // 5. Response
+     return response()->json([
+    'name' => $attendee->first_name . ' ' . $attendee->last_name,
+    'status' => strtoupper($logType),
+    'gate' => $gate,
+    'time' => now()->format('H:i:s')
+]);
+
+
+     return response()->json([
+    'name' => 'Unknown User',
+    'status' => 'ERROR',
+    'gate' => $gate,
+    'time' => now()->format('H:i:s')
+]);
+     
+}
 }
