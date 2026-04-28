@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> <!-- before editing -->
 <html>
 <head>
     <title>Scan Terminal - Scanttendance</title>
@@ -28,7 +28,7 @@
         <div class="pulse-ring"></div>
 
         <!-- SCAN INPUT ONLY -->
-        <form method="POST" action="/scan" id="scanForm">
+        <form method="POST" action="/scan" id="scanForm" onsubmit="return false;">
             @csrf
             <input type="hidden" name="gate" value="Gate A">
 
@@ -55,20 +55,33 @@
 </div>
 
 <script>
+    /*
+        Correct flow:
+        Scanner types into input
+        Either:
+        presses Enter → triggers keypress
+        OR stops typing → triggers input timeout
+        processScan() runs
+        Sends POST /scan
+        Backend returns JSON
+        showCard() displays result
+        Input resets
+    */
+    
 const scanner = document.getElementById('scanner');
 const form = document.getElementById('scanForm');
 const stack = document.getElementById('scanStack');
 
-window.onload = () => scanner.focus();
-document.addEventListener('click', () => scanner.focus());
+let isProcessing = false;
 
-scanner.addEventListener('blur', () => {
-    setTimeout(() => scanner.focus(), 50);
-});
+async function processScan() {
 
-scanner.addEventListener('input', async function () {
+    // Handlessending request
+    // validating response
+    // updating UI
 
-    if (this.value.length < 4) return;
+    if (isProcessing) return;
+    isProcessing = true;
 
     let formData = new FormData(form);
 
@@ -81,21 +94,72 @@ scanner.addEventListener('input', async function () {
         body: formData
     });
 
-    let data = await res.json();
+    let data;
+
+    try {
+        data = await res.json();
+    } catch (e) {
+        console.error("Invalid JSON response");
+        isProcessing = false;
+        return;
+    }
+
+    console.log(data);
+
+    if (!data || !data.name) {
+        console.error("Invalid response:", data);
+        isProcessing = false;
+        return;
+    }
 
     showCard(data);
 
-    this.value = "";
+    scanner.value = "";
     scanner.focus();
-});
+
+    // setTimeout(() => isProcessing = false, 300); // If network is  slow, this might unlick too early
+    isProcessing = false;
+}
+
+
+window.onload = () => scanner.focus();
+
+    document.addEventListener('click', () => scanner.focus());
+
+    scanner.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            processScan();
+        }
+    });
+
+    let typingTimer;
+
+    scanner.addEventListener('input', function () {
+        clearTimeout(typingTimer);
+
+        typingTimer = setTimeout(() => {
+            if (this.value.length > 3) {
+                processScan();
+            }
+        }, 100);
+    });
+
+
 
 const beep = new Audio('/beep.mp3');
 
+
 function showCard(data) {
 
-    beep.play();
+    beep.currentTime = 0;
+    beep.play().catch(() => {});
 
-    let type = (data.status === 'IN') ? 'in' : 'out';
+    let type = 'out';
+
+    if (data.status === 'IN') type = 'in';
+    if (data.status === 'ERROR') type = 'error';
+    if (data.status === 'TOO FAST') type = 'warning';
 
     let card = document.createElement("div");
     card.className = `scan-card ${type}`;

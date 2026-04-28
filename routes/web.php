@@ -41,3 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/scan', [ScanController::class, 'store']);
 
 });
+
+//max 60 requests per minute per user
+Route::post('/scan', [ScanController::class, 'store'])
+    ->middleware(['auth', 'throttle:60,1']);
